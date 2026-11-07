@@ -16,11 +16,14 @@ class WebCLITest(unittest.TestCase):
         environment=dict(os.environ)
         environment.pop('BLUEBIRD_CODE', None)
         launcher=Path(__file__).resolve().parents[1] / 'bluebird'
-        process=subprocess.Popen([sys.executable,str(launcher),'start','web','--port','0'],
+        process=subprocess.Popen([sys.executable,'-X','faulthandler',str(launcher),'start','web','--port','0'],
                                  env=environment,stdin=subprocess.DEVNULL,
                                  stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
         try:
-            self.assertTrue(select.select([process.stdout],[],[],10)[0], 'Server did not report startup')
+            if not select.select([process.stdout],[],[],10)[0]:
+                process.send_signal(signal.SIGABRT)
+                _, stderr = process.communicate(timeout=5)
+                self.fail('Server did not report startup:\n' + stderr)
             started=json.loads(process.stdout.readline())
             self.assertTrue(started['ok'])
             self.assertEqual(started['data']['mode'],'full-access')
