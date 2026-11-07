@@ -10,6 +10,7 @@ First public release of the macOS Bluebird CLI.
 - `bluebird start web`: loopback authorization console with separate home/list pages and creation/edit dialogs in English, Chinese, and Japanese.
 - Fourteen individual CLI permissions, grouped selection, and scopes requiring all nonempty task tags to be authorized.
 - Codes displayed once at creation, stored as digests, editable grants, and revocation. Owner mode uses `--full-access`.
+- Loopback console startup without reverse DNS lookup, avoiding startup stalls on macOS.
 - Boundary validation for HTTP request framing, JSON, timeouts, and authorization changes during lock waits.
 - `bluebird --version` and machine-readable `capabilities.data.cli_version`.
 - Complete source distributions, installation checks, three-language setup/security/compatibility guides, and release CI.

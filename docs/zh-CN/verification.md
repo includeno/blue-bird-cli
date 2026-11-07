@@ -1,6 +1,13 @@
-# 验证记录：0.2 多语言与架构重构
+# 验证记录
 
 [文档目录](README.md) · [English](../en/verification.md) | 简体中文 | [日本語](../ja/verification.md)
+
+## 0.3.0 发布检查 — 2026-11-07
+
+- 本机 macOS 15.7.5 / Apple Silicon / Python 3.11：79 项测试通过，包含已安装 Bluebird 3.14.1 / 437 的全部 26 语言资源矩阵。
+- 新增版本一致性、归档内容/路径、错误提示命令可执行性、回环服务启动不依赖 DNS 的检查；迁移测试显式关闭 SQLite 连接，消除 Python 3.13 的资源警告。
+- 标准 wheel/sdist 构建、包元数据检查、解压源码测试和仓库外安装均纳入发布门槛。[Tests 工作流](https://github.com/includeno/blue-bird-cli/actions/workflows/test.yml) 保存每个提交的 Python 3.9/3.13 与干净 macOS Intel/Apple Silicon 检查结果；[Release 工作流](https://github.com/includeno/blue-bird-cli/actions/workflows/release.yml) 在发布前重新检查包和原生助手。
+- 托管 runner 未安装 Bluebird，也没有辅助功能授权；原生检查验证安装和编译。实际 App 操作证据仍以以下单独记录的本机验证为准。
 
 ## 边界回归测试 — 2026-11-07
 

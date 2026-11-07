@@ -108,7 +108,7 @@ class AuthorizationTest(unittest.TestCase):
             with self.subTest(permissions=permissions), self.assertRaises(ValueError):
                 self.authority.create('Invalid', ['101'], permissions, self.store.tags())
         import sqlite3
-        with sqlite3.connect(self.authority.path) as db:
+        with contextlib.closing(sqlite3.connect(self.authority.path)) as db, db:
             rows = db.execute('SELECT id,digest,label,tags,created_at,revoked_at FROM grants').fetchall()
             db.execute('DROP TABLE grants')
             db.execute('CREATE TABLE grants (id TEXT PRIMARY KEY,digest TEXT,label TEXT,tags TEXT,created_at TEXT,revoked_at TEXT)')

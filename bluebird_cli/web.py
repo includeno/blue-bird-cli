@@ -5,11 +5,19 @@ from pathlib import Path
 import re
 import secrets
 import socket
+from socketserver import TCPServer
 import sqlite3
 
 from .auth import PERMISSION_GROUPS
 
 ASSETS = Path(__file__).parent / 'web_assets'
+
+
+class LoopbackServer(ThreadingHTTPServer):
+    def server_bind(self):
+        # A numeric loopback address needs no potentially blocking reverse DNS lookup.
+        TCPServer.server_bind(self)
+        self.server_name, self.server_port = self.server_address
 
 
 def make_server(authority, store, port=0):
@@ -97,7 +105,7 @@ def make_server(authority, store, port=0):
         do_POST = handle_request
         do_PATCH = handle_request
 
-    server = ThreadingHTTPServer(('127.0.0.1', port), Handler)
+    server = LoopbackServer(('127.0.0.1', port), Handler)
     server.daemon_threads = True
     return server, f'http://127.0.0.1:{server.server_port}/#token={token}'
 

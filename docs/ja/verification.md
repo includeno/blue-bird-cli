@@ -1,6 +1,13 @@
-# 検証記録：0.2 多言語対応とアーキテクチャ改修
+# 検証記録
 
 [ドキュメント一覧](README.md) · [English](../en/verification.md) | [简体中文](../zh-CN/verification.md) | 日本語
+
+## 0.3.0 リリース検証 — 2026-11-07
+
+- ローカル macOS 15.7.5 / Apple Silicon / Python 3.11：Bluebird 3.14.1 / 437 の全 26 言語リソースを含む 79 件のテストが成功しました。
+- バージョン整合性、アーカイブの内容とパス、エラー内の実行可能なコマンド、DNS に依存しないループバック起動を検査します。移行テストでは SQLite 接続を明示的に閉じ、Python 3.13 のリソース警告を解消しました。
+- 標準 wheel/sdist ビルド、メタデータ検査、展開したソースのテスト、チェックアウト外でのインストールをリリース条件としています。[Tests ワークフロー](https://github.com/includeno/blue-bird-cli/actions/workflows/test.yml) に各コミットの Python 3.9/3.13 とクリーンな macOS Intel/Apple Silicon の結果を保存し、[Release ワークフロー](https://github.com/includeno/blue-bird-cli/actions/workflows/release.yml) で公開前にパッケージとネイティブヘルパーを再検証します。
+- ホスト型 runner に Bluebird とアクセシビリティ権限はありません。ネイティブ検査はインストールとコンパイルを対象とし、実際のアプリ操作の証拠は以下のローカル検証記録に限ります。
 
 ## 境界値の回帰テスト — 2026-11-07
 

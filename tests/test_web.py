@@ -15,6 +15,15 @@ from test_auth import FakeStore
 
 
 class WebTest(unittest.TestCase):
+    def test_loopback_startup_does_not_require_dns(self):
+        with patch('socket.getfqdn', side_effect=RuntimeError('DNS unavailable')):
+            server, url = make_server(self.authority, self.store)
+        try:
+            self.assertEqual(server.server_name, '127.0.0.1')
+            self.assertEqual(urlsplit(url).port, server.server_port)
+        finally:
+            server.server_close()
+
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.authority = Authority(Path(self.tmp.name) / 'auth.sqlite3')

@@ -1,6 +1,13 @@
-# Verification records: 0.2 localization and architecture refactor
+# Verification records
 
 [Documentation](README.md) · English | [简体中文](../zh-CN/verification.md) | [日本語](../ja/verification.md)
+
+## 0.3.0 release checks — 2026-11-07
+
+- Local macOS 15.7.5 / Apple Silicon / Python 3.11: 79 tests passed, including the installed Bluebird 3.14.1 / 437 resource matrix for all 26 locales.
+- Added package-version, archive-content/path, runnable error-hint, and DNS-independent loopback-startup checks. A migration fixture now explicitly closes its SQLite connection on Python 3.13.
+- Standard wheel/sdist builds, package metadata checks, extracted-source tests, and installation outside the checkout are release gates. The [Tests workflow](https://github.com/includeno/blue-bird-cli/actions/workflows/test.yml) records Python 3.9/3.13 and clean macOS Intel/Apple Silicon results for each commit; the [Release workflow](https://github.com/includeno/blue-bird-cli/actions/workflows/release.yml) repeats package and native checks before publishing.
+- Hosted runners do not have Bluebird or Accessibility authorization. Their native checks verify installation and compilation; live app evidence remains the separately recorded local checks below.
 
 ## Boundary regression tests — 2026-11-07
 
