@@ -1,0 +1,35 @@
+name: Bug report / 缺陷报告 / 不具合報告
+description: Report a reproducible CLI or web-console problem.
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: "For vulnerabilities, use Security → Report a vulnerability. Do not include codes, admin URLs, database files, or private task content. 中文和日本語の報告も歓迎します。"
+  - type: input
+    id: version
+    attributes:
+      label: CLI version
+      description: Output of bluebird --version
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment / 环境 / 環境
+      description: macOS version, Apple Silicon or Intel, Python version, Bluebird version and UI language, terminal/agent host.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce / 复现步骤 / 再現手順
+      description: Include the command with credentials and private task text removed.
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Expected and actual behavior / 预期与实际 / 期待結果と実際
+      description: Include sanitized JSON errors and exit codes. Mention full-access or code mode without its secret value.
+    validations:
+      required: true

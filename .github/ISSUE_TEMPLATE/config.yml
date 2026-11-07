@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security / 安全漏洞 / セキュリティ
+    url: https://github.com/includeno/blue-bird-cli/security/advisories/new
+    about: Report vulnerabilities privately; do not post credentials or exploit details in public issues.

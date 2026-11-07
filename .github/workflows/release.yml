@@ -1,0 +1,85 @@
+name: Release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+jobs:
+  build:
+    name: Build release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Match tag to the package version
+        run: |
+          python - <<'PY'
+          import os
+          from bluebird_cli import __version__
+          assert os.environ['GITHUB_REF_NAME'] == 'v' + __version__, 'Tag/package version mismatch'
+          PY
+      - run: python -m pip install build twine
+      - run: python -m build
+      - run: python -m twine check dist/*
+      - run: python scripts/check_distribution.py dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-distributions
+          path: dist/*
+          if-no-files-found: error
+  native:
+    name: Verify release (${{ matrix.os }})
+    needs: build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, macos-15-intel]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-distributions
+          path: dist
+      - run: python -B -m unittest discover -s tests -v
+      - name: Compile installed native helper
+        env:
+          BLUEBIRD_CLI_HOME: ${{ runner.temp }}/bluebird-release-native
+        run: |
+          python -m pip install --no-deps dist/*.whl
+          cd "$RUNNER_TEMP"
+          bluebird --full-access setup
+  publish:
+    name: Publish GitHub release
+    needs: [build, native]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-distributions
+          path: dist
+      - name: Prepare notes and checksums
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          version=os.environ['GITHUB_REF_NAME'][1:]
+          changes=Path('CHANGELOG.md').read_text()
+          section=changes.split('## '+version+' — ',1)[1]
+          section=section.split('\n',1)[1].split('\n## ',1)[0]
+          Path('release-notes.md').write_text(section.strip()+'\n')
+          PY
+          cd dist
+          sha256sum *.whl *.tar.gz > SHA256SUMS.txt
+      - name: Create release with verified assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" dist/* --verify-tag --title "Bluebird CLI $GITHUB_REF_NAME" --notes-file release-notes.md

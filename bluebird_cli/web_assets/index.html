@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bluebird · Access Console</title>
+  <link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="/" data-route="/"><span class="mark" aria-hidden="true">b</span><strong>Bluebird<span>ACCESS CONSOLE</span></strong></a><nav aria-label="Main navigation"><a href="/" data-route="/" data-i18n="home">Home</a><a href="/codes" data-route="/codes" data-i18n="codeList">Codes</a></nav><div class="top-actions"><span class="local"><i></i><span data-i18n="local">Local only</span></span><label class="sr-only" for="language">Language / 语言 / 言語</label><select id="language"><option value="en">English</option><option value="zh-CN">简体中文</option><option value="ja">日本語</option></select></div></header>
+  <main>
+    <section class="intro"><div><p class="eyebrow" data-i18n="eyebrow">PERMISSIONS, WITH BOUNDARIES</p><h1 id="page-heading" data-i18n="heading">Give each agent its own scope.</h1><p id="page-subtitle" class="subtitle" data-i18n="subtitle">Create access codes tied to the Bluebird tags you choose. You stay in control.</p></div><button id="refresh" class="secondary" data-i18n="refresh">Refresh</button></section>
+    <div id="notice" class="notice" role="status" hidden></div>
+    <section id="secret-panel" class="secret-panel" hidden aria-labelledby="secret-heading"><div><span class="badge" data-i18n="created">CODE CREATED</span><h2 id="secret-heading" data-i18n="saveCode">Save this code now.</h2><p data-i18n="once">The full code is shown only once. It cannot be recovered after you leave this page.</p></div><div class="copy-row"><label class="sr-only" for="new-code" data-i18n="codeLabel">New authorization code</label><input id="new-code" type="text" readonly spellcheck="false" autocomplete="off"><button id="copy-code" data-i18n="copy">Copy code</button><button id="hide-code" class="secondary" data-i18n="hide">Hide</button></div></section>
+    <div id="home-page">
+    <section class="metrics" aria-label="Overview"><div><span data-i18n="active">Active codes</span><strong id="active-count">—</strong><small data-i18n="activeNote">Ready for scoped CLI access</small></div><div><span data-i18n="availableTags">Available tags</span><strong id="tag-count">—</strong><small data-i18n="tagsNote">Read from your local Bluebird app</small></div><div class="rule-card"><span data-i18n="rule">Scope rule</span><strong data-i18n="allTags">Every tag must match</strong><small data-i18n="ruleNote">Untagged tasks are never included.</small></div></section>
+<div class="home-actions"><a class="button-link" href="/codes" data-route="/codes" data-i18n="manageCodes">Manage authorization codes</a><p data-i18n="homeHint">Choose functions, bind tags, and give each agent its own code.</p></div>
+    <section class="usage"><div><p class="eyebrow" data-i18n="connect">CONNECT YOUR AGENT</p><h2 data-i18n="useTitle">Two ways to run the CLI.</h2></div><div class="usage-grid"><article><h3 data-i18n="scoped">Scoped access</h3><p data-i18n="envNote">Pass the code using an environment variable or --code. Keep the value out of shared logs.</p><pre><code>export BLUEBIRD_CODE='bb_…'
+bluebird auth-status
+bluebird list
+bluebird add 'Task' --tags 'Authorized tag'</code></pre></article><article><h3 data-i18n="owner">Local owner</h3><p data-i18n="fullNote">Explicit unrestricted access, including this authorization console.</p><pre><code>bluebird --full-access doctor
+bluebird --full-access list
+bluebird start web</code></pre></article></div></section>
+    </div>
+    <div id="codes-page" hidden><section class="codes-section"><div class="section-title"><div><h2 data-i18n="codes">Authorization codes</h2><p data-i18n="codesNote">Changes apply when the next CLI command starts.</p></div><button id="new-code-button" type="button" data-i18n="newCode">New code</button></div><div id="code-list" class="code-list" aria-live="polite"></div></section></div>
+    <dialog id="code-dialog" aria-labelledby="form-title"><form id="code-form"><button id="close-dialog" type="button" class="dialog-close secondary" aria-label="Close" data-title="close">×</button><p class="eyebrow" id="form-kicker" data-i18n="newScope">NEW SCOPE</p><h2 id="form-title" data-i18n="createTitle">Create an access code</h2><div id="form-notice" class="notice" role="status" hidden></div><div class="form-grid"><div><label for="label" data-i18n="nameLabel">Name</label><input id="label" name="label" maxlength="80" required autocomplete="off" data-placeholder="namePlaceholder"><label for="tag-search" data-i18n="chooseTags">Authorized tags</label><p class="field-hint" data-i18n="atLeast">Select at least one existing tag.</p><input id="tag-search" type="search" data-placeholder="searchPlaceholder" autocomplete="off"><div id="tag-picker" class="tag-picker"></div><p id="selection-count" class="selection-count"></p></div><section class="permissions" aria-labelledby="permissions-heading"><h3 id="permissions-heading" data-i18n="functions">Allowed CLI functions</h3><p class="field-hint" data-i18n="functionsHint">Choose what this code may do within its tag scope.</p><div class="selection-tools"><button type="button" id="select-functions" class="secondary" data-i18n="selectAll">Select all</button><button type="button" id="clear-functions" class="secondary" data-i18n="clearAll">Clear</button></div><div id="permission-picker"></div><p id="permission-count" class="selection-count"></p></section></div><div class="form-actions"><button id="save" type="submit" disabled data-i18n="createButton">Generate code</button><button id="cancel-edit" type="button" class="secondary" data-i18n="cancel">Cancel</button></div></form><div class="scope-note"><strong data-i18n="scopeTitle">A precise boundary</strong><p data-i18n="scopeNote">A task needs at least one tag, and all its tags must belong to this code. Codes bind to tag IDs, so recreating a tag with the same name does not inherit access.</p></div></dialog>
+    <footer><span>Bluebird CLI</span><p data-i18n="boundary">Codes scope CLI commands. A local user who can run full-access or read app data directly remains unrestricted; this is not an operating-system sandbox.</p><span class="footer-host">127.0.0.1</span></footer>
+  </main>
+</body>
+</html>

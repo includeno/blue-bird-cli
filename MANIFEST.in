@@ -1,0 +1,11 @@
+include bluebird LICENSE README.md README.zh-CN.md CONTRIBUTING.md SECURITY.md CHANGELOG.md
+recursive-include docs *.md
+recursive-include skills *.md
+recursive-include tests *.py
+recursive-include scripts *.py
+recursive-include bluebird_cli/native *.swift
+recursive-include bluebird_cli/web_assets *.html *.css *.js
+prune .build
+prune .playwright-cli
+prune output
+global-exclude __pycache__ *.py[cod] .DS_Store

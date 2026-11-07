@@ -1,0 +1,15 @@
+name: Feature request / 功能建议 / 機能提案
+description: Describe a workflow this CLI should support.
+title: "[Feature] "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and desired workflow / 问题与流程 / 問題と操作手順
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior / 期望功能 / 提案する動作
+      description: Include relevant CLI commands or web-console interactions. Omit secrets and personal data.
